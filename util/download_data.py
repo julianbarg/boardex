@@ -9,7 +9,7 @@ from os import listdir
 
 def download_table(_db, name, _library, _table):
     table = db.get_table(library=_library, table=_table)
-    table.to_pickle(f'data/{name}.pickle')
+    table.to_feather(f'data/{name}.feather')
     del table
 
 
@@ -20,7 +20,7 @@ db = wrds.Connection(wrds_username=parameters.username)
 
 
 for dataset in parameters.datasets:
-    if not redownload and dataset['name'] + '.pickle' in listdir('data'):
+    if not redownload and dataset['name'] + '.feather' in listdir('data'):
         continue
     else:
         download_table(db, dataset['name'], dataset['library'], dataset['table'])
