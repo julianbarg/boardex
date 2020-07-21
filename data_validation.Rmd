@@ -1,0 +1,89 @@
+---
+jupyter:
+  jupytext:
+    formats: ipynb,Rmd
+    text_representation:
+      extension: .Rmd
+      format_name: rmarkdown
+      format_version: '1.1'
+      jupytext_version: 1.2.1
+  kernelspec:
+    display_name: R 3.6.1
+    language: R
+    name: ir361
+---
+
+<!-- #region {"slideshow": {"slide_type": "slide"}} -->
+Data validation
+<!-- #endregion -->
+
+<!-- #region {"slideshow": {"slide_type": "subslide"}} -->
+## Setup
+<!-- #endregion -->
+
+```{r}
+library(tidyverse)
+```
+
+```{r slideshow={'slide_type': 'subslide'}}
+na_summary <- arrow::read_feather("data/na_summary.feather")
+
+head(na_summary)
+```
+
+<!-- #region {"slideshow": {"slide_type": "slide"}} -->
+## Check for duplicates
+<!-- #endregion -->
+
+<!-- #region {"slideshow": {"slide_type": "subslide"}} -->
+### Annual report inconsistencies
+<!-- #endregion -->
+
+<!-- #region {"slideshow": {"slide_type": "subslide"}} -->
+If there are no inconsistent, the number of unique entries should be the same, regardless of whether or not we include only company and year, or include variables of interest, too.
+<!-- #endregion -->
+
+```{r}
+na_summary %>%
+    select(companyid, annualreportdate) %>%
+    n_distinct()
+
+na_summary %>%
+    select(companyid, annualreportdate, numberdirectors, nationalitymix, genderratio, companyid) %>%
+    n_distinct()
+```
+
+Looks correct.
+
+```{r slideshow={'slide_type': 'subslide'}}
+na_summary %>%
+    select(companyid, annualreportdate) %>%
+    n_distinct()
+
+na_summary %>%
+    select(companyid, annualreportdate, isin) %>%
+    n_distinct()
+```
+
+There are 9,040 inconsistencies with the ISIN code.
+
+<!-- #region {"slideshow": {"slide_type": "subslide"}} -->
+### Multiple annual reports in a year
+<!-- #endregion -->
+
+If there are multple annual reports in any year, the number of entries should be reduced when we extract only the year from the annual report date column.
+
+```{r}
+na_summary %>%
+    select(companyid, annualreportdate) %>%
+    n_distinct()
+```
+
+```{r}
+na_summary %>%
+    mutate(year = lubridate::year(annualreportdate)) %>%
+    select(companyid, year) %>%
+    n_distinct()
+```
+
+There are 632 instances of two reports being filled in one year.
