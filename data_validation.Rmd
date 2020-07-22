@@ -26,7 +26,7 @@ library(tidyverse)
 ```
 
 ```{r slideshow={'slide_type': 'subslide'}}
-na_summary <- arrow::read_feather("data/na_summary.feather")
+na_summary <- arrow::read_feather("data/na_summary_preprocessed.feather")
 
 head(na_summary)
 ```
@@ -39,33 +39,45 @@ head(na_summary)
 ### Annual report inconsistencies
 <!-- #endregion -->
 
-<!-- #region {"slideshow": {"slide_type": "subslide"}} -->
-If there are no inconsistent, the number of unique entries should be the same, regardless of whether or not we include only company and year, or include variables of interest, too.
-<!-- #endregion -->
-
-```{r}
+```{r slideshow={'slide_type': 'subslide'}}
 na_summary %>%
-    select(companyid, annualreportdate) %>%
-    n_distinct()
-
-na_summary %>%
-    select(companyid, annualreportdate, numberdirectors, nationalitymix, genderratio, companyid) %>%
-    n_distinct()
+    select(isin, annualreportdate, companyid) %>%
+    group_by(isin, annualreportdate) %>%
+    summarize(n = n_distinct(companyid)) %>%
+    filter(n > 1)
 ```
-
-Looks correct.
 
 ```{r slideshow={'slide_type': 'subslide'}}
 na_summary %>%
-    select(companyid, annualreportdate) %>%
+    filter(isin == "US30224P2002" & annualreportdate == "2013-12-01") %>%
+    select(isin, annualreportdate, companyid, everything()) %>%
+    head()
+```
+
+Looks like there is something funky going on with this one observation. Let's drop it.
+
+<!-- #region {"slideshow": {"slide_type": "subslide"}} -->
+### Drop offending observation
+<!-- #endregion -->
+
+```{r}
+na_summary <- filter(na_summary,isin != "US30224P2002")
+```
+
+### Check other variables
+
+```{r}
+na_summary %>%
+    select(isin, annualreportdate) %>%
     n_distinct()
 
 na_summary %>%
-    select(companyid, annualreportdate, isin) %>%
+    select(isin, annualreportdate, companyid, numberdirectors, nationalitymix, genderratio) %>%
+    group_by(isin, annualreportdate) %>%
     n_distinct()
 ```
 
-There are 9,040 inconsistencies with the ISIN code.
+Looks good
 
 <!-- #region {"slideshow": {"slide_type": "subslide"}} -->
 ### Multiple annual reports in a year
@@ -86,4 +98,29 @@ na_summary %>%
     n_distinct()
 ```
 
-There are 632 instances of two reports being filled in one year.
+<!-- #region {"slideshow": {"slide_type": "subslide"}} -->
+Let's drop these, too.
+<!-- #endregion -->
+
+```{r}
+na_summary %>%
+    mutate(year = lubridate::year(annualreportdate)) %>%
+    group_by(companyid, year) %>%
+    mutate(n = n_distinct(annualreportdate)) %>%
+    filter(n == 1) %>%
+    ungroup() %>%
+    select(companyid, annualreportdate) %>%
+    n_distinct()
+```
+
+```{r}
+na_summary %>%
+    mutate(year = lubridate::year(annualreportdate)) %>%
+    group_by(companyid, year) %>%
+    summarize(n = n_distinct(annualreportdate)) %>%
+    filter(n > 1)
+```
+
+```{r}
+
+```
