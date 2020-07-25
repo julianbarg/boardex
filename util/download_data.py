@@ -7,7 +7,8 @@ import sys
 from os import listdir
 
 
-def download_table(_db, name, _library, _table):
+def download_table(_db, name, _library, _table, columns=None):
+    # if 'columns'
     table = db.get_table(library=_library, table=_table)
     table.to_feather(f'data/{name}.feather')
     del table
