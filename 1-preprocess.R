@@ -46,6 +46,7 @@ write_feather(boards, "data/na_boards_preprocessed.feather")
 
 # Grab date of birth
 age <- read_feather("data/age.feather")
+age$age <- as.integer(age$age)
 age <- select(age, directorid, age)
 age <- rename(age, "age_2020" = "age")
 write_feather(age, "data/age_preprocessed.feather")
