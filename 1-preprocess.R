@@ -13,8 +13,9 @@ df <- filter(df, !is.na(isin))
 df <- filter(df, rowtype != "Disclosed Earner")
 df$cusip <- stringr::str_sub(df$isin, 3, 11)
 df$annualreportdate <- as_date(df$annualreportdate)
+df$ned <- df$ned == "Yes"
 df <- df %>%
-    select(boardname, gender, boardid, directorid, timebrd, annualreportdate, totalcompensation, 
+    select(boardname, ned, gender, boardid, directorid, timebrd, annualreportdate, totalcompensation, 
            eqlinkremratio, directorid, isin, genderratio, nationalitymix, numberdirectors, stdevage, cusip)
 df <- unique(df)
 write_feather(df, "data/na_summary_preprocessed.feather")
