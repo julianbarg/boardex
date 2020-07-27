@@ -16,7 +16,6 @@ df <- df %>%
     select(boardname, gender, boardid, directorid, timebrd, annualreportdate, totalcompensation, 
            eqlinkremratio, directorid, isin, genderratio, nationalitymix, numberdirectors, cusip)
 df <- unique(df)
-
 write_feather(df, "data/na_summary_preprocessed.feather")
 
 
@@ -26,14 +25,27 @@ gender <- df %>%
     select(directorid, gender) %>%
     group_by(directorid) %>%
     summarize(gender = first(gender))
-
 write_feather(gender, "data/gender.feather")
 
 
 
 ## Extract relevant columns & companies from compa
-
 compa <- read_feather("data/compa.feather")
-
 compa <- select(compa, gvkey, fyear, cusip, apdedate, at, emp, dltt, ceq, act, lct, bkvlps, csho)
 write_feather(compa, "data/compa_preprocessed.feather")
+
+
+
+## Extract relevant columns for board dataset and retain only unique entries
+boards <- read_feather("data/na_boards.feather")
+boards <- select(boards, -c(functionalexperience, ned, boardrole, brdposition))
+boards <- unique(boards)
+write_feather(boards, "data/na_boards_preprocessed.feather")
+
+
+
+# Grab date of birth
+age <- read_feather("data/age.feather")
+age <- select(age, directorid, age)
+age <- rename(age, "age_2020" = "age")
+write_feather(age, "data/age_preprocessed.feather")
