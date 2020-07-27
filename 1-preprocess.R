@@ -48,5 +48,6 @@ write_feather(boards, "data/na_boards_preprocessed.feather")
 # Grab date of birth
 age <- read_feather("data/age.feather")
 age$dob <- na_if(age$dob, "n.a.")
-age$dob <- parse_date_time(age$dob, orders=c("Y", "mY", "dmY"))
+age$date_birth <- parse_date_time(age$dob, orders=c("Y", "mY", "dmY"))
+age <- select(age, directorid, date_birth)
 write_feather(age, "data/age_preprocessed.feather")
