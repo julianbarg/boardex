@@ -8,6 +8,8 @@ df <- read_feather("data/na_summary.feather")
 
 df <- filter(df, !is.na(annualreportdate))
 df <- filter(df, !is.na(isin))
+# I noticed by chance that these are not board members!
+df <- filter(df, rowtype != "Disclosed Earner")
 df$cusip <- stringr::str_sub(df$isin, 3, 11)
 df$annualreportdate <- lubridate::as_date(df$annualreportdate)
 df <- df %>%
