@@ -2,6 +2,7 @@
 
 library(arrow)
 library(tidyverse)
+library(lubridate)
 
 ##  Preprocess na_summary
 df <- read_feather("data/na_summary.feather")
@@ -11,10 +12,10 @@ df <- filter(df, !is.na(isin))
 # I noticed by chance that these are not board members!
 df <- filter(df, rowtype != "Disclosed Earner")
 df$cusip <- stringr::str_sub(df$isin, 3, 11)
-df$annualreportdate <- lubridate::as_date(df$annualreportdate)
+df$annualreportdate <- as_date(df$annualreportdate)
 df <- df %>%
     select(boardname, gender, boardid, directorid, timebrd, annualreportdate, totalcompensation, 
-           eqlinkremratio, directorid, isin, genderratio, nationalitymix, numberdirectors, cusip)
+           eqlinkremratio, directorid, isin, genderratio, nationalitymix, numberdirectors, stdevage, cusip)
 df <- unique(df)
 write_feather(df, "data/na_summary_preprocessed.feather")
 
@@ -46,7 +47,6 @@ write_feather(boards, "data/na_boards_preprocessed.feather")
 
 # Grab date of birth
 age <- read_feather("data/age.feather")
-age$age <- as.integer(age$age)
-age <- select(age, directorid, age)
-age <- rename(age, "age_2020" = "age")
+age$dob <- na_if(age$dob, "n.a.")
+age$dob <- parse_date_time(age$dob, orders=c("Y", "mY", "dmY"))
 write_feather(age, "data/age_preprocessed.feather")
