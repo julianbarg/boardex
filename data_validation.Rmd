@@ -23,16 +23,18 @@ jupyter:
 
 ```{r}
 library(tidyverse)
+library(arrow)
 ```
 
 ```{r slideshow={'slide_type': 'subslide'}}
-na_summary <- arrow::read_feather("data/na_summary_preprocessed.feather")
+na_summary <- read_feather("data/na_summary_preprocessed.feather")
+na_summary_original <- read_feather("data/na_summary.feather")
 
 head(na_summary)
 ```
 
 <!-- #region {"slideshow": {"slide_type": "slide"}} -->
-## Check for duplicates
+## Check BoardEx dataset
 <!-- #endregion -->
 
 <!-- #region {"slideshow": {"slide_type": "subslide"}} -->
@@ -41,30 +43,32 @@ head(na_summary)
 
 ```{r slideshow={'slide_type': 'subslide'}}
 na_summary %>%
-    select(isin, annualreportdate, companyid) %>%
+    select(isin, annualreportdate, boardid) %>%
     group_by(isin, annualreportdate) %>%
-    summarize(n = n_distinct(companyid)) %>%
+    summarize(n = n_distinct(boardid)) %>%
     filter(n > 1)
 ```
 
 ```{r slideshow={'slide_type': 'subslide'}}
 na_summary %>%
     filter(isin == "US30224P2002" & annualreportdate == "2013-12-01") %>%
-    select(isin, annualreportdate, companyid, everything()) %>%
+    select(isin, annualreportdate, boardid, everything()) %>%
     head()
 ```
 
 Looks like there is something funky going on with this one observation. Let's drop it.
 
 <!-- #region {"slideshow": {"slide_type": "subslide"}} -->
-### Drop offending observation
+Drop offending observation
 <!-- #endregion -->
 
 ```{r}
 na_summary <- filter(na_summary,isin != "US30224P2002")
 ```
 
+<!-- #region {"slideshow": {"slide_type": "subslide"}} -->
 ### Check other variables
+<!-- #endregion -->
 
 ```{r}
 na_summary %>%
@@ -72,12 +76,71 @@ na_summary %>%
     n_distinct()
 
 na_summary %>%
-    select(isin, annualreportdate, companyid, numberdirectors, nationalitymix, genderratio) %>%
-    group_by(isin, annualreportdate) %>%
+    select(isin, annualreportdate, boardid, numberdirectors, nationalitymix, genderratio) %>%
     n_distinct()
 ```
 
 Looks good
+
+<!-- #region {"slideshow": {"slide_type": "subslide"}} -->
+### Check for duplicate observations with different data
+<!-- #endregion -->
+
+```{r}
+nrow(unique(select(na_summary, annualreportdate, isin, directorid)))
+```
+
+```{r}
+nrow(unique(na_summary))
+```
+
+There are 94 observations with divergences.
+
+```{r slideshow={'slide_type': 'subslide'}}
+inconsistencies <- na_summary %>%
+    group_by(isin, annualreportdate, directorid) %>%
+    distinct() %>%
+    mutate(n = n()) %>%
+    filter(n > 1)
+
+nrow(inconsistencies)
+```
+
+We have successfully identified all diverging duplicate observations.
+
+```{r slideshow={'slide_type': 'subslide'}}
+head(select(inconsistencies, isin, annualreportdate, directorid, everything()))
+```
+
+<!-- #region {"slideshow": {"slide_type": "subslide"}} -->
+Looks like the issue might be missing values. If we fill them in, we might be able to resolve this problem.
+<!-- #endregion -->
+
+```{r}
+# In theory, we should be able to just arrange by variables and have NAs at the end, but for some reason it's not quite working.
+inconsistencies$nas <- rowSums(is.na(inconsistencies))
+
+inconsistencies <- inconsistencies %>%
+    group_by(isin, annualreportdate, directorid) %>%
+    arrange(nas) %>%
+    fill(totalcompensation, eqlinkremratio) %>%
+    select(-c(n, nas))
+
+nrow(inconsistencies)
+```
+
+```{r}
+inconsistencies_remaining <- inconsistencies %>%
+    group_by(isin, annualreportdate, directorid) %>%
+    distinct() %>%
+    mutate(n = n()) %>%
+    filter(n > 1)
+nrow(inconsistencies_remaining)
+```
+
+<!-- #region {"slideshow": {"slide_type": "subslide"}} -->
+This has resolved problems for 44 observations, but the remaining ones we cannot resolve. The problem is probably data that was later updated (e.g., NAs filled in), but because we do not have a date of update, we do not know which data is more recent.
+<!-- #endregion -->
 
 <!-- #region {"slideshow": {"slide_type": "subslide"}} -->
 ### Multiple annual reports in a year
@@ -87,40 +150,128 @@ If there are multple annual reports in any year, the number of entries should be
 
 ```{r}
 na_summary %>%
-    select(companyid, annualreportdate) %>%
+    select(isin, annualreportdate) %>%
     n_distinct()
 ```
 
 ```{r}
 na_summary %>%
     mutate(year = lubridate::year(annualreportdate)) %>%
-    select(companyid, year) %>%
+    select(isin, year) %>%
     n_distinct()
 ```
 
+There 635 instances of duplicate company-year observation, meaning 1270 observations to be removed.
+
 <!-- #region {"slideshow": {"slide_type": "subslide"}} -->
-Let's drop these, too.
+We could drop these, too.
+<!-- #endregion -->
+
+```{r}
+# na_summary <- na_summary %>%
+#     mutate(year = lubridate::year(annualreportdate)) %>%
+#     group_by(companyid, year) %>%
+#     mutate(n = n_distinct(annualreportdate)) %>%
+#     filter(n == 1) %>%
+#     ungroup() %>%
+#     select(-year, - n)
+
+# n_distinct(select(na_summary, isin, annualreportdate))
+```
+
+That would remove 1,270 observations.
+
+<!-- #region {"slideshow": {"slide_type": "subslide"}} -->
+### Duplicate observations of directors
 <!-- #endregion -->
 
 ```{r}
 na_summary %>%
-    mutate(year = lubridate::year(annualreportdate)) %>%
-    group_by(companyid, year) %>%
-    mutate(n = n_distinct(annualreportdate)) %>%
-    filter(n == 1) %>%
-    ungroup() %>%
-    select(companyid, annualreportdate) %>%
-    n_distinct()
+    group_by(directorid, boardid, annualreportdate) %>%
+    summarize(n = n()) %>%
+    {table(.$n)}
 ```
 
+For some reasons, there are a lot of instances of duplicate observations for directors.
+
+```{r slideshow={'slide_type': 'subslide'}}
+na_summary_original %>%
+    group_by(directorid, boardid, annualreportdate) %>%
+    mutate(n = n()) %>%
+    arrange(desc(n), annualreportdate) %>%
+    select(directorid, annualreportdate, everything()) %>%
+    head()
+```
+
+<!-- #region {"slideshow": {"slide_type": "subslide"}} -->
+At least in this case, it seems that the entries are just duplicates. Some of the duplicates seem to be the same person taking different roles.
+<!-- #endregion -->
+
+<!-- #region {"slideshow": {"slide_type": "slide"}} -->
+### Validate other columns
+<!-- #endregion -->
+
+<!-- #region {"slideshow": {"slide_type": "subslide"}} -->
+#### Gender variable
+<!-- #endregion -->
+
 ```{r}
+table(na_summary$gender) 
+```
+
+The data does not contain any values other than F and M.
+
+```{r slideshow={'slide_type': 'subslide'}}
 na_summary %>%
-    mutate(year = lubridate::year(annualreportdate)) %>%
-    group_by(companyid, year) %>%
-    summarize(n = n_distinct(annualreportdate)) %>%
-    filter(n > 1)
+    group_by(directorid) %>%
+    summarize(n = n_distinct(gender)) %>%
+    arrange(desc(n)) %>%
+    head(3)
+```
+
+All directors have the same gender across all reports, that's also good to know.
+
+<!-- #region {"slideshow": {"slide_type": "subslide"}} -->
+#### boardid vs companyid
+<!-- #endregion -->
+
+```{r}
+table(na_summary_original$boardid == na_summary_original$companyid)
+```
+
+Interesting
+
+<!-- #region {"slideshow": {"slide_type": "subslide"}} -->
+#### Validate cusip and ISIN
+<!-- #endregion -->
+
+Length for ISIN should always be 12: country code + cusip + check digit.
+
+```{r}
+table(nchar(na_summary$isin))
+```
+
+That's good.
+
+<!-- #region {"slideshow": {"slide_type": "subslide"}} -->
+Make sure that compa always provides 9 char cusip.
+<!-- #endregion -->
+
+```{r}
+compa_cusip <- read_feather("data/compa.feather")$cusip
+invisible(gc())
 ```
 
 ```{r}
-
+table(nchar(compa_cusip))
 ```
+
+<!-- #region {"slideshow": {"slide_type": "subslide"}} -->
+See how great the overlap is between the two.
+<!-- #endregion -->
+
+```{r}
+table(stringr::str_sub(na_summary$isin, 3, 11) %in% compa_cusip)
+```
+
+That's a pretty good coverage.

@@ -13272,6 +13272,7 @@ a.anchor-link {
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="nf">library</span><span class="p">(</span><span class="n">tidyverse</span><span class="p">)</span>
+<span class="nf">library</span><span class="p">(</span><span class="n">arrow</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -13288,16 +13289,30 @@ a.anchor-link {
 
 
 <div class="output_subarea output_stream output_stderr output_text">
-<pre>── <span class="ansi-bold">Attaching packages</span> ─────────────────────────────────────────────────────────────── tidyverse 1.3.0 ──
+<pre>── <span class="ansi-bold">Attaching packages</span> ─────────────────────────────────────── tidyverse 1.3.0 ──
 
-<span class="ansi-green-fg">✓</span> <span class="ansi-blue-fg">ggplot2</span> 3.3.2     <span class="ansi-green-fg">✓</span> <span class="ansi-blue-fg">purrr  </span> 0.3.4
-<span class="ansi-green-fg">✓</span> <span class="ansi-blue-fg">tibble </span> 3.0.3     <span class="ansi-green-fg">✓</span> <span class="ansi-blue-fg">dplyr  </span> 1.0.0
-<span class="ansi-green-fg">✓</span> <span class="ansi-blue-fg">tidyr  </span> 1.1.0     <span class="ansi-green-fg">✓</span> <span class="ansi-blue-fg">stringr</span> 1.4.0
-<span class="ansi-green-fg">✓</span> <span class="ansi-blue-fg">readr  </span> 1.3.1     <span class="ansi-green-fg">✓</span> <span class="ansi-blue-fg">forcats</span> 0.5.0
+<span class="ansi-green-fg">✔</span> <span class="ansi-blue-fg">ggplot2</span> 3.3.2     <span class="ansi-green-fg">✔</span> <span class="ansi-blue-fg">purrr  </span> 0.3.4
+<span class="ansi-green-fg">✔</span> <span class="ansi-blue-fg">tibble </span> 3.0.3     <span class="ansi-green-fg">✔</span> <span class="ansi-blue-fg">dplyr  </span> 1.0.0
+<span class="ansi-green-fg">✔</span> <span class="ansi-blue-fg">tidyr  </span> 1.1.0     <span class="ansi-green-fg">✔</span> <span class="ansi-blue-fg">stringr</span> 1.4.0
+<span class="ansi-green-fg">✔</span> <span class="ansi-blue-fg">readr  </span> 1.3.1     <span class="ansi-green-fg">✔</span> <span class="ansi-blue-fg">forcats</span> 0.5.0
 
-── <span class="ansi-bold">Conflicts</span> ────────────────────────────────────────────────────────────────── tidyverse_conflicts() ──
-<span class="ansi-red-fg">x</span> <span class="ansi-blue-fg">dplyr</span>::<span class="ansi-green-fg">filter()</span> masks <span class="ansi-blue-fg">stats</span>::filter()
-<span class="ansi-red-fg">x</span> <span class="ansi-blue-fg">dplyr</span>::<span class="ansi-green-fg">lag()</span>    masks <span class="ansi-blue-fg">stats</span>::lag()
+── <span class="ansi-bold">Conflicts</span> ────────────────────────────────────────── tidyverse_conflicts() ──
+<span class="ansi-red-fg">✖</span> <span class="ansi-blue-fg">dplyr</span>::<span class="ansi-green-fg">filter()</span> masks <span class="ansi-blue-fg">stats</span>::filter()
+<span class="ansi-red-fg">✖</span> <span class="ansi-blue-fg">dplyr</span>::<span class="ansi-green-fg">lag()</span>    masks <span class="ansi-blue-fg">stats</span>::lag()
+
+
+Attaching package: ‘arrow’
+
+
+The following object is masked from ‘package:readr’:
+
+    read_table
+
+
+The following object is masked from ‘package:utils’:
+
+    timestamp
+
 
 </pre>
 </div>
@@ -13312,7 +13327,8 @@ a.anchor-link {
 <div class="prompt input_prompt">In&nbsp;[2]:</div>
 <div class="inner_cell">
     <div class="input_area">
-<div class=" highlight hl-r"><pre><span></span><span class="n">na_summary</span> <span class="o">&lt;-</span> <span class="n">arrow</span><span class="o">::</span><span class="nf">read_feather</span><span class="p">(</span><span class="s">&quot;data/na_summary.feather&quot;</span><span class="p">)</span>
+<div class=" highlight hl-r"><pre><span></span><span class="n">na_summary</span> <span class="o">&lt;-</span> <span class="nf">read_feather</span><span class="p">(</span><span class="s">&quot;data/na_summary_preprocessed.feather&quot;</span><span class="p">)</span>
+<span class="n">na_summary_original</span> <span class="o">&lt;-</span> <span class="nf">read_feather</span><span class="p">(</span><span class="s">&quot;data/na_summary.feather&quot;</span><span class="p">)</span>
 
 <span class="nf">head</span><span class="p">(</span><span class="n">na_summary</span><span class="p">)</span>
 </pre></div>
@@ -13333,18 +13349,18 @@ a.anchor-link {
 
 <div class="output_html rendered_html output_subarea ">
 <table>
-<caption>A tibble: 6 × 68</caption>
+<caption>A tibble: 6 × 13</caption>
 <thead>
-	<tr><th scope=col>rowtype</th><th scope=col>boardname</th><th scope=col>ned</th><th scope=col>directorname</th><th scope=col>rolename</th><th scope=col>rolestatus</th><th scope=col>gender</th><th scope=col>nationality</th><th scope=col>boardid</th><th scope=col>clientcompanyid</th><th scope=col>⋯</th><th scope=col>nationalitymix</th><th scope=col>numberdirectors</th><th scope=col>stdevtimebrd</th><th scope=col>stdevtimeinco</th><th scope=col>stdevtotnolstdbrd</th><th scope=col>stdevtotcurrnolstdbrd</th><th scope=col>stdevnoquals</th><th scope=col>stdevage</th><th scope=col>networksize</th><th scope=col>companyid</th></tr>
-	<tr><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;???&gt;</th><th scope=col>⋯</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th></tr>
+	<tr><th scope=col>boardname</th><th scope=col>gender</th><th scope=col>boardid</th><th scope=col>directorid</th><th scope=col>timebrd</th><th scope=col>annualreportdate</th><th scope=col>totalcompensation</th><th scope=col>eqlinkremratio</th><th scope=col>isin</th><th scope=col>genderratio</th><th scope=col>nationalitymix</th><th scope=col>numberdirectors</th><th scope=col>cusip</th></tr>
+	<tr><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;date&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;chr&gt;</th></tr>
 </thead>
 <tbody>
-	<tr><td>Board Member</td><td>EQUITY ONE INC (De-listed 03/2017)                          </td><td>Yes</td><td>David Fischel</td><td>Independent Director</td><td>David Fischel joined this role on 04 Jan 2011</td><td>M</td><td>British </td><td>10925</td><td>NA</td><td>⋯</td><td>0.4</td><td> 9</td><td>7.1</td><td>7.1</td><td>3.1</td><td>1.3</td><td>1.5</td><td>8.5</td><td>6092</td><td>10925</td></tr>
-	<tr><td>Board Member</td><td>EQUITY ONE INC (De-listed 03/2017)                          </td><td>Yes</td><td>David Fischel</td><td>Independent Director</td><td>David Fischel joined this role on 04 Jan 2011</td><td>M</td><td>British </td><td>10925</td><td>NA</td><td>⋯</td><td>0.4</td><td> 9</td><td>5.8</td><td>5.8</td><td>3.2</td><td>1.2</td><td>1.2</td><td>7.7</td><td>6092</td><td>10925</td></tr>
-	<tr><td>Board Member</td><td>EQUITY ONE INC (De-listed 03/2017)                          </td><td>Yes</td><td>David Fischel</td><td>Independent Director</td><td>David Fischel joined this role on 04 Jan 2011</td><td>M</td><td>British </td><td>10925</td><td>NA</td><td>⋯</td><td>0.4</td><td>10</td><td>5.3</td><td>5.3</td><td>3.0</td><td>1.8</td><td>1.1</td><td>6.9</td><td>6092</td><td>10925</td></tr>
-	<tr><td>Board Member</td><td>EQUITY ONE INC (De-listed 03/2017)                          </td><td>Yes</td><td>David Fischel</td><td>Independent Director</td><td>David Fischel joined this role on 04 Jan 2011</td><td>M</td><td>British </td><td>10925</td><td>NA</td><td>⋯</td><td>0.4</td><td> 9</td><td>7.1</td><td>7.1</td><td>3.1</td><td>1.4</td><td>1.5</td><td>8.5</td><td>6092</td><td>10925</td></tr>
-	<tr><td>Board Member</td><td>EQUITY ONE INC (De-listed 03/2017)                          </td><td>Yes</td><td>David Fischel</td><td>Independent Director</td><td>David Fischel joined this role on 04 Jan 2011</td><td>M</td><td>British </td><td>10925</td><td>NA</td><td>⋯</td><td>0.5</td><td>10</td><td>5.6</td><td>5.6</td><td>3.1</td><td>1.5</td><td>1.1</td><td>7.3</td><td>6092</td><td>10925</td></tr>
-	<tr><td>Board Member</td><td>NATIONAL MEDICAL HEALTH CARD SYSTEMS INC (De-listed 04/2008)</td><td>Yes</td><td>David Shaw   </td><td>Director - SD       </td><td>David Shaw joined this role on 08 Dec 2004   </td><td>M</td><td>American</td><td>21616</td><td>NA</td><td>⋯</td><td>0.0</td><td>10</td><td>2.2</td><td>2.1</td><td>1.4</td><td>0.7</td><td>0.8</td><td>9.4</td><td>4321</td><td>21616</td></tr>
+	<tr><td>EQUITY ONE INC (De-listed 03/2017)                          </td><td>M</td><td>10925</td><td> 1</td><td>3.9</td><td>2014-12-01</td><td>NA</td><td>NA</td><td>US2947521009</td><td>0.778</td><td>0.4</td><td> 9</td><td>294752100</td></tr>
+	<tr><td>EQUITY ONE INC (De-listed 03/2017)                          </td><td>M</td><td>10925</td><td> 1</td><td>2.9</td><td>2013-12-01</td><td>NA</td><td>NA</td><td>US2947521009</td><td>0.778</td><td>0.4</td><td> 9</td><td>294752100</td></tr>
+	<tr><td>EQUITY ONE INC (De-listed 03/2017)                          </td><td>M</td><td>10925</td><td> 1</td><td>0.9</td><td>2011-12-01</td><td>NA</td><td>NA</td><td>US2947521009</td><td>0.900</td><td>0.4</td><td>10</td><td>294752100</td></tr>
+	<tr><td>EQUITY ONE INC (De-listed 03/2017)                          </td><td>M</td><td>10925</td><td> 1</td><td>4.9</td><td>2015-12-01</td><td>NA</td><td>NA</td><td>US2947521009</td><td>0.778</td><td>0.4</td><td> 9</td><td>294752100</td></tr>
+	<tr><td>EQUITY ONE INC (De-listed 03/2017)                          </td><td>M</td><td>10925</td><td> 1</td><td>1.9</td><td>2012-12-01</td><td>NA</td><td>NA</td><td>US2947521009</td><td>0.800</td><td>0.5</td><td>10</td><td>294752100</td></tr>
+	<tr><td>NATIONAL MEDICAL HEALTH CARD SYSTEMS INC (De-listed 04/2008)</td><td>M</td><td>21616</td><td>16</td><td>1.5</td><td>2006-06-01</td><td>NA</td><td>NA</td><td>US6369183024</td><td>1.000</td><td>0.0</td><td>10</td><td>636918302</td></tr>
 </tbody>
 </table>
 
@@ -13359,7 +13375,7 @@ a.anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<h2 id="Check-for-duplicates">Check for duplicates<a class="anchor-link" href="#Check-for-duplicates">&#182;</a></h2>
+<h2 id="Check-BoardEx-dataset">Check BoardEx dataset<a class="anchor-link" href="#Check-BoardEx-dataset">&#182;</a></h2>
 </div>
 </div>
 </div></section><section>
@@ -13370,26 +13386,16 @@ a.anchor-link {
 </div>
 </div>
 </div></section><section>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>If there are no inconsistent, the number of unique entries should be the same, regardless of whether or not we include only company and year, or include variables of interest, too.</p>
-
-</div>
-</div>
-</div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
 <div class="prompt input_prompt">In&nbsp;[3]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="n">na_summary</span> <span class="o">%&gt;%</span>
-    <span class="nf">select</span><span class="p">(</span><span class="n">companyid</span><span class="p">,</span> <span class="n">annualreportdate</span><span class="p">)</span> <span class="o">%&gt;%</span>
-    <span class="nf">n_distinct</span><span class="p">()</span>
-
-<span class="n">na_summary</span> <span class="o">%&gt;%</span>
-    <span class="nf">select</span><span class="p">(</span><span class="n">companyid</span><span class="p">,</span> <span class="n">annualreportdate</span><span class="p">,</span> <span class="n">numberdirectors</span><span class="p">,</span> <span class="n">nationalitymix</span><span class="p">,</span> <span class="n">genderratio</span><span class="p">,</span> <span class="n">companyid</span><span class="p">)</span> <span class="o">%&gt;%</span>
-    <span class="nf">n_distinct</span><span class="p">()</span>
+    <span class="nf">select</span><span class="p">(</span><span class="n">isin</span><span class="p">,</span> <span class="n">annualreportdate</span><span class="p">,</span> <span class="n">boardid</span><span class="p">)</span> <span class="o">%&gt;%</span>
+    <span class="nf">group_by</span><span class="p">(</span><span class="n">isin</span><span class="p">,</span> <span class="n">annualreportdate</span><span class="p">)</span> <span class="o">%&gt;%</span>
+    <span class="nf">summarize</span><span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="nf">n_distinct</span><span class="p">(</span><span class="n">boardid</span><span class="p">))</span> <span class="o">%&gt;%</span>
+    <span class="nf">filter</span><span class="p">(</span><span class="n">n</span> <span class="o">&gt;</span> <span class="m">1</span><span class="p">)</span>
 </pre></div>
 
     </div>
@@ -13405,11 +13411,11 @@ a.anchor-link {
     <div class="prompt"></div>
 
 
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>`summarise()` regrouping output by &#39;isin&#39; (override with `.groups` argument)
 
-<div class="output_html rendered_html output_subarea ">
-130393
+</pre>
 </div>
-
 </div>
 
 <div class="output_area">
@@ -13419,22 +13425,29 @@ a.anchor-link {
 
 
 <div class="output_html rendered_html output_subarea ">
-130393
-</div>
+<table>
+<caption>A grouped_df: 6 × 3</caption>
+<thead>
+	<tr><th scope=col>isin</th><th scope=col>annualreportdate</th><th scope=col>n</th></tr>
+	<tr><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;date&gt;</th><th scope=col>&lt;int&gt;</th></tr>
+</thead>
+<tbody>
+	<tr><td>US30224P2002</td><td>2013-12-01</td><td>2</td></tr>
+	<tr><td>US30224P2002</td><td>2014-12-01</td><td>2</td></tr>
+	<tr><td>US30224P2002</td><td>2015-12-01</td><td>2</td></tr>
+	<tr><td>US30224P2002</td><td>2016-12-01</td><td>2</td></tr>
+	<tr><td>US30224P2002</td><td>2017-12-01</td><td>2</td></tr>
+	<tr><td>US30224P2002</td><td>2018-12-01</td><td>2</td></tr>
+</tbody>
+</table>
 
 </div>
 
 </div>
-</div>
-
-</div>
-<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
-</div><div class="inner_cell">
-<div class="text_cell_render border-box-sizing rendered_html">
-<p>Looks correct.</p>
 
 </div>
 </div>
+
 </div></section><section>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
@@ -13442,11 +13455,97 @@ a.anchor-link {
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="n">na_summary</span> <span class="o">%&gt;%</span>
-    <span class="nf">select</span><span class="p">(</span><span class="n">companyid</span><span class="p">,</span> <span class="n">annualreportdate</span><span class="p">)</span> <span class="o">%&gt;%</span>
+    <span class="nf">filter</span><span class="p">(</span><span class="n">isin</span> <span class="o">==</span> <span class="s">&quot;US30224P2002&quot;</span> <span class="o">&amp;</span> <span class="n">annualreportdate</span> <span class="o">==</span> <span class="s">&quot;2013-12-01&quot;</span><span class="p">)</span> <span class="o">%&gt;%</span>
+    <span class="nf">select</span><span class="p">(</span><span class="n">isin</span><span class="p">,</span> <span class="n">annualreportdate</span><span class="p">,</span> <span class="n">boardid</span><span class="p">,</span> <span class="nf">everything</span><span class="p">())</span> <span class="o">%&gt;%</span>
+    <span class="nf">head</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<table>
+<caption>A tibble: 6 × 13</caption>
+<thead>
+	<tr><th scope=col>isin</th><th scope=col>annualreportdate</th><th scope=col>boardid</th><th scope=col>boardname</th><th scope=col>gender</th><th scope=col>directorid</th><th scope=col>timebrd</th><th scope=col>totalcompensation</th><th scope=col>eqlinkremratio</th><th scope=col>genderratio</th><th scope=col>nationalitymix</th><th scope=col>numberdirectors</th><th scope=col>cusip</th></tr>
+	<tr><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;date&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;chr&gt;</th></tr>
+</thead>
+<tbody>
+	<tr><td>US30224P2002</td><td>2013-12-01</td><td>2009179</td><td>ESH Hospitality Inc (ESH Hospitality LLC prior to 11/2013)</td><td>M</td><td> 36881</td><td>0.1</td><td>NA</td><td>NA</td><td>1</td><td>0</td><td>5</td><td>30224P200</td></tr>
+	<tr><td>US30224P2002</td><td>2013-12-01</td><td>2009180</td><td>EXTENDED STAY AMERICA INC                                 </td><td>M</td><td> 36881</td><td>0.1</td><td>NA</td><td>NA</td><td>1</td><td>0</td><td>7</td><td>30224P200</td></tr>
+	<tr><td>US30224P2002</td><td>2013-12-01</td><td>2009180</td><td>EXTENDED STAY AMERICA INC                                 </td><td>M</td><td> 90572</td><td>0.1</td><td>NA</td><td>NA</td><td>1</td><td>0</td><td>7</td><td>30224P200</td></tr>
+	<tr><td>US30224P2002</td><td>2013-12-01</td><td>2009179</td><td>ESH Hospitality Inc (ESH Hospitality LLC prior to 11/2013)</td><td>M</td><td> 90572</td><td>0.1</td><td>NA</td><td>NA</td><td>1</td><td>0</td><td>5</td><td>30224P200</td></tr>
+	<tr><td>US30224P2002</td><td>2013-12-01</td><td>2009180</td><td>EXTENDED STAY AMERICA INC                                 </td><td>M</td><td>203140</td><td>0.1</td><td>NA</td><td>NA</td><td>1</td><td>0</td><td>7</td><td>30224P200</td></tr>
+	<tr><td>US30224P2002</td><td>2013-12-01</td><td>2009180</td><td>EXTENDED STAY AMERICA INC                                 </td><td>M</td><td>444845</td><td>0.1</td><td>NA</td><td>NA</td><td>1</td><td>0</td><td>7</td><td>30224P200</td></tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Looks like there is something funky going on with this one observation. Let's drop it.</p>
+
+</div>
+</div>
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Drop offending observation</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="n">na_summary</span> <span class="o">&lt;-</span> <span class="nf">filter</span><span class="p">(</span><span class="n">na_summary</span><span class="p">,</span><span class="n">isin</span> <span class="o">!=</span> <span class="s">&quot;US30224P2002&quot;</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Check-other-variables">Check other variables<a class="anchor-link" href="#Check-other-variables">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="n">na_summary</span> <span class="o">%&gt;%</span>
+    <span class="nf">select</span><span class="p">(</span><span class="n">isin</span><span class="p">,</span> <span class="n">annualreportdate</span><span class="p">)</span> <span class="o">%&gt;%</span>
     <span class="nf">n_distinct</span><span class="p">()</span>
 
 <span class="n">na_summary</span> <span class="o">%&gt;%</span>
-    <span class="nf">select</span><span class="p">(</span><span class="n">companyid</span><span class="p">,</span> <span class="n">annualreportdate</span><span class="p">,</span> <span class="n">isin</span><span class="p">)</span> <span class="o">%&gt;%</span>
+    <span class="nf">select</span><span class="p">(</span><span class="n">isin</span><span class="p">,</span> <span class="n">annualreportdate</span><span class="p">,</span> <span class="n">boardid</span><span class="p">,</span> <span class="n">numberdirectors</span><span class="p">,</span> <span class="n">nationalitymix</span><span class="p">,</span> <span class="n">genderratio</span><span class="p">)</span> <span class="o">%&gt;%</span>
     <span class="nf">n_distinct</span><span class="p">()</span>
 </pre></div>
 
@@ -13465,7 +13564,7 @@ a.anchor-link {
 
 
 <div class="output_html rendered_html output_subarea ">
-130393
+96734
 </div>
 
 </div>
@@ -13477,7 +13576,7 @@ a.anchor-link {
 
 
 <div class="output_html rendered_html output_subarea ">
-139359
+96734
 </div>
 
 </div>
@@ -13489,7 +13588,273 @@ a.anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>There are 9,040 inconsistencies with the ISIN code.</p>
+<p>Looks good</p>
+
+</div>
+</div>
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Check-for-duplicate-observations-with-different-data">Check for duplicate observations with different data<a class="anchor-link" href="#Check-for-duplicate-observations-with-different-data">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[7]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="nf">nrow</span><span class="p">(</span><span class="nf">unique</span><span class="p">(</span><span class="nf">select</span><span class="p">(</span><span class="n">na_summary</span><span class="p">,</span> <span class="n">annualreportdate</span><span class="p">,</span> <span class="n">isin</span><span class="p">,</span> <span class="n">directorid</span><span class="p">)))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+901104
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[8]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="nf">nrow</span><span class="p">(</span><span class="nf">unique</span><span class="p">(</span><span class="n">na_summary</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+901198
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>There are 94 observations with divergences.</p>
+
+</div>
+</div>
+</div></section><section>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[9]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="n">inconsistencies</span> <span class="o">&lt;-</span> <span class="n">na_summary</span> <span class="o">%&gt;%</span>
+    <span class="nf">group_by</span><span class="p">(</span><span class="n">isin</span><span class="p">,</span> <span class="n">annualreportdate</span><span class="p">,</span> <span class="n">directorid</span><span class="p">)</span> <span class="o">%&gt;%</span>
+    <span class="nf">distinct</span><span class="p">()</span> <span class="o">%&gt;%</span>
+    <span class="nf">mutate</span><span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="nf">n</span><span class="p">())</span> <span class="o">%&gt;%</span>
+    <span class="nf">filter</span><span class="p">(</span><span class="n">n</span> <span class="o">&gt;</span> <span class="m">1</span><span class="p">)</span>
+
+<span class="nf">nrow</span><span class="p">(</span><span class="n">inconsistencies</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+188
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We have successfully identified all diverging duplicate observations.</p>
+
+</div>
+</div>
+</div></section><section>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[10]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="nf">head</span><span class="p">(</span><span class="nf">select</span><span class="p">(</span><span class="n">inconsistencies</span><span class="p">,</span> <span class="n">isin</span><span class="p">,</span> <span class="n">annualreportdate</span><span class="p">,</span> <span class="n">directorid</span><span class="p">,</span> <span class="nf">everything</span><span class="p">()))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<table>
+<caption>A grouped_df: 6 × 14</caption>
+<thead>
+	<tr><th scope=col>isin</th><th scope=col>annualreportdate</th><th scope=col>directorid</th><th scope=col>boardname</th><th scope=col>gender</th><th scope=col>boardid</th><th scope=col>timebrd</th><th scope=col>totalcompensation</th><th scope=col>eqlinkremratio</th><th scope=col>genderratio</th><th scope=col>nationalitymix</th><th scope=col>numberdirectors</th><th scope=col>cusip</th><th scope=col>n</th></tr>
+	<tr><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;date&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;int&gt;</th></tr>
+</thead>
+<tbody>
+	<tr><td>US9497461015</td><td>2000-12-01</td><td>11522</td><td><span style=white-space:pre-wrap>WELLS FARGO &amp; CO                                      </span></td><td>M</td><td>33264</td><td>19.9</td><td> 0</td><td><span style=white-space:pre-wrap>  NA</span></td><td>0.737</td><td>0.1</td><td>19</td><td>949746101</td><td>2</td></tr>
+	<tr><td>US9497461015</td><td>2000-12-01</td><td>11522</td><td><span style=white-space:pre-wrap>WELLS FARGO &amp; CO                                      </span></td><td>M</td><td>33264</td><td>19.9</td><td>NA</td><td><span style=white-space:pre-wrap>  NA</span></td><td>0.737</td><td>0.1</td><td>19</td><td>949746101</td><td>2</td></tr>
+	<tr><td>US36866W1062</td><td>2007-12-01</td><td>15177</td><td>GEMSTAR TV GUIDE INTERNATIONAL INC (De-listed 05/2008)</td><td>F</td><td>12961</td><td> 3.0</td><td>NA</td><td>  NA</td><td>0.778</td><td>0.0</td><td> 9</td><td>36866W106</td><td>2</td></tr>
+	<tr><td>US36866W1062</td><td>2007-12-01</td><td>15177</td><td>GEMSTAR TV GUIDE INTERNATIONAL INC (De-listed 05/2008)</td><td>F</td><td>12961</td><td> 3.0</td><td> 0</td><td>  NA</td><td>0.778</td><td>0.0</td><td> 9</td><td>36866W106</td><td>2</td></tr>
+	<tr><td>US00971T1016</td><td>2011-12-01</td><td>25015</td><td>AKAMAI TECHNOLOGIES INC                               </td><td>M</td><td> 1221</td><td>12.2</td><td>59</td><td>0.79</td><td>0.636</td><td>0.0</td><td>11</td><td>00971T101</td><td>2</td></tr>
+	<tr><td>US00971T1016</td><td>2011-12-01</td><td>25015</td><td>AKAMAI TECHNOLOGIES INC                               </td><td>M</td><td> 1221</td><td>12.2</td><td>NA</td><td>  NA</td><td>0.636</td><td>0.0</td><td>11</td><td>00971T101</td><td>2</td></tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Looks like the issue might be missing values. If we fill them in, we might be able to resolve this problem.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[11]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="c1"># In theory, we should be able to just arrange by variables and have NAs at the end, but for some reason it&#39;s not quite working.</span>
+<span class="n">inconsistencies</span><span class="o">$</span><span class="n">nas</span> <span class="o">&lt;-</span> <span class="nf">rowSums</span><span class="p">(</span><span class="nf">is.na</span><span class="p">(</span><span class="n">inconsistencies</span><span class="p">))</span>
+
+<span class="n">inconsistencies</span> <span class="o">&lt;-</span> <span class="n">inconsistencies</span> <span class="o">%&gt;%</span>
+    <span class="nf">group_by</span><span class="p">(</span><span class="n">isin</span><span class="p">,</span> <span class="n">annualreportdate</span><span class="p">,</span> <span class="n">directorid</span><span class="p">)</span> <span class="o">%&gt;%</span>
+    <span class="nf">arrange</span><span class="p">(</span><span class="n">nas</span><span class="p">)</span> <span class="o">%&gt;%</span>
+    <span class="nf">fill</span><span class="p">(</span><span class="n">totalcompensation</span><span class="p">,</span> <span class="n">eqlinkremratio</span><span class="p">)</span> <span class="o">%&gt;%</span>
+    <span class="nf">select</span><span class="p">(</span><span class="o">-</span><span class="nf">c</span><span class="p">(</span><span class="n">n</span><span class="p">,</span> <span class="n">nas</span><span class="p">))</span>
+
+<span class="nf">nrow</span><span class="p">(</span><span class="n">inconsistencies</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+188
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[12]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="n">inconsistencies_remaining</span> <span class="o">&lt;-</span> <span class="n">inconsistencies</span> <span class="o">%&gt;%</span>
+    <span class="nf">group_by</span><span class="p">(</span><span class="n">isin</span><span class="p">,</span> <span class="n">annualreportdate</span><span class="p">,</span> <span class="n">directorid</span><span class="p">)</span> <span class="o">%&gt;%</span>
+    <span class="nf">distinct</span><span class="p">()</span> <span class="o">%&gt;%</span>
+    <span class="nf">mutate</span><span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="nf">n</span><span class="p">())</span> <span class="o">%&gt;%</span>
+    <span class="nf">filter</span><span class="p">(</span><span class="n">n</span> <span class="o">&gt;</span> <span class="m">1</span><span class="p">)</span>
+<span class="nf">nrow</span><span class="p">(</span><span class="n">inconsistencies_remaining</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+100
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>This has resolved problems for 44 observations, but the remaining ones we cannot resolve. The problem is probably data that was later updated (e.g., NAs filled in), but because we do not have a date of update, we do not know which data is more recent.</p>
 
 </div>
 </div>
@@ -13511,11 +13876,11 @@ a.anchor-link {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[5]:</div>
+<div class="prompt input_prompt">In&nbsp;[13]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="n">na_summary</span> <span class="o">%&gt;%</span>
-    <span class="nf">select</span><span class="p">(</span><span class="n">companyid</span><span class="p">,</span> <span class="n">annualreportdate</span><span class="p">)</span> <span class="o">%&gt;%</span>
+    <span class="nf">select</span><span class="p">(</span><span class="n">isin</span><span class="p">,</span> <span class="n">annualreportdate</span><span class="p">)</span> <span class="o">%&gt;%</span>
     <span class="nf">n_distinct</span><span class="p">()</span>
 </pre></div>
 
@@ -13534,7 +13899,7 @@ a.anchor-link {
 
 
 <div class="output_html rendered_html output_subarea ">
-130393
+96734
 </div>
 
 </div>
@@ -13545,12 +13910,12 @@ a.anchor-link {
 </div>
 <div class="cell border-box-sizing code_cell rendered">
 <div class="input">
-<div class="prompt input_prompt">In&nbsp;[6]:</div>
+<div class="prompt input_prompt">In&nbsp;[14]:</div>
 <div class="inner_cell">
     <div class="input_area">
 <div class=" highlight hl-r"><pre><span></span><span class="n">na_summary</span> <span class="o">%&gt;%</span>
     <span class="nf">mutate</span><span class="p">(</span><span class="n">year</span> <span class="o">=</span> <span class="n">lubridate</span><span class="o">::</span><span class="nf">year</span><span class="p">(</span><span class="n">annualreportdate</span><span class="p">))</span> <span class="o">%&gt;%</span>
-    <span class="nf">select</span><span class="p">(</span><span class="n">companyid</span><span class="p">,</span> <span class="n">year</span><span class="p">)</span> <span class="o">%&gt;%</span>
+    <span class="nf">select</span><span class="p">(</span><span class="n">isin</span><span class="p">,</span> <span class="n">year</span><span class="p">)</span> <span class="o">%&gt;%</span>
     <span class="nf">n_distinct</span><span class="p">()</span>
 </pre></div>
 
@@ -13569,7 +13934,7 @@ a.anchor-link {
 
 
 <div class="output_html rendered_html output_subarea ">
-129761
+96099
 </div>
 
 </div>
@@ -13581,7 +13946,510 @@ a.anchor-link {
 <div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
 </div><div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
-<p>There are 632 instances of two reports being filled in one year.</p>
+<p>There 635 instances of duplicate company-year observation, meaning 1270 observations to be removed.</p>
+
+</div>
+</div>
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>We could drop these, too.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[15]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="c1"># na_summary &lt;- na_summary %&gt;%</span>
+<span class="c1">#     mutate(year = lubridate::year(annualreportdate)) %&gt;%</span>
+<span class="c1">#     group_by(companyid, year) %&gt;%</span>
+<span class="c1">#     mutate(n = n_distinct(annualreportdate)) %&gt;%</span>
+<span class="c1">#     filter(n == 1) %&gt;%</span>
+<span class="c1">#     ungroup() %&gt;%</span>
+<span class="c1">#     select(-year, - n)</span>
+
+<span class="c1"># n_distinct(select(na_summary, isin, annualreportdate))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>That would remove 1,270 observations.</p>
+
+</div>
+</div>
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Duplicate-observations-of-directors">Duplicate observations of directors<a class="anchor-link" href="#Duplicate-observations-of-directors">&#182;</a></h3>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[16]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="n">na_summary</span> <span class="o">%&gt;%</span>
+    <span class="nf">group_by</span><span class="p">(</span><span class="n">directorid</span><span class="p">,</span> <span class="n">boardid</span><span class="p">,</span> <span class="n">annualreportdate</span><span class="p">)</span> <span class="o">%&gt;%</span>
+    <span class="nf">summarize</span><span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="nf">n</span><span class="p">())</span> <span class="o">%&gt;%</span>
+    <span class="p">{</span><span class="nf">table</span><span class="p">(</span><span class="n">.$n</span><span class="p">)}</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>`summarise()` regrouping output by &#39;directorid&#39;, &#39;boardid&#39; (override with `.groups` argument)
+
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+
+<div class="output_text output_subarea ">
+<pre>
+     1      2      3      4      5      6      8     10 
+757733  54322   6800   1762    679    452    157      1 </pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>For some reasons, there are a lot of instances of duplicate observations for directors.</p>
+
+</div>
+</div>
+</div></section><section>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[17]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="n">na_summary_original</span> <span class="o">%&gt;%</span>
+    <span class="nf">group_by</span><span class="p">(</span><span class="n">directorid</span><span class="p">,</span> <span class="n">boardid</span><span class="p">,</span> <span class="n">annualreportdate</span><span class="p">)</span> <span class="o">%&gt;%</span>
+    <span class="nf">mutate</span><span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="nf">n</span><span class="p">())</span> <span class="o">%&gt;%</span>
+    <span class="nf">arrange</span><span class="p">(</span><span class="nf">desc</span><span class="p">(</span><span class="n">n</span><span class="p">),</span> <span class="n">annualreportdate</span><span class="p">)</span> <span class="o">%&gt;%</span>
+    <span class="nf">select</span><span class="p">(</span><span class="n">directorid</span><span class="p">,</span> <span class="n">annualreportdate</span><span class="p">,</span> <span class="nf">everything</span><span class="p">())</span> <span class="o">%&gt;%</span>
+    <span class="nf">head</span><span class="p">()</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<table>
+<caption>A grouped_df: 6 × 69</caption>
+<thead>
+	<tr><th scope=col>directorid</th><th scope=col>annualreportdate</th><th scope=col>rowtype</th><th scope=col>boardname</th><th scope=col>ned</th><th scope=col>directorname</th><th scope=col>rolename</th><th scope=col>rolestatus</th><th scope=col>gender</th><th scope=col>nationality</th><th scope=col>⋯</th><th scope=col>numberdirectors</th><th scope=col>stdevtimebrd</th><th scope=col>stdevtimeinco</th><th scope=col>stdevtotnolstdbrd</th><th scope=col>stdevtotcurrnolstdbrd</th><th scope=col>stdevnoquals</th><th scope=col>stdevage</th><th scope=col>networksize</th><th scope=col>companyid</th><th scope=col>n</th></tr>
+	<tr><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;date&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>&lt;chr&gt;</th><th scope=col>⋯</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;int&gt;</th></tr>
+</thead>
+<tbody>
+	<tr><td>33628</td><td>2013-12-01</td><td>Board Member    </td><td>LIBERTY MEDIA CORP</td><td>No</td><td>Greg Maffei</td><td>President/CEO</td><td>Greg Maffei joined this role on 14 Jan 2013</td><td>M</td><td>American</td><td>⋯</td><td>9</td><td>0</td><td>0</td><td>7.9</td><td>2.3</td><td>1.3</td><td>11.7</td><td>4646</td><td>1924862</td><td>16</td></tr>
+	<tr><td>33628</td><td>2013-12-01</td><td>Board Member    </td><td>LIBERTY MEDIA CORP</td><td>No</td><td>Greg Maffei</td><td>President/CEO</td><td>Greg Maffei joined this role on 14 Jan 2013</td><td>M</td><td>American</td><td>⋯</td><td>9</td><td>0</td><td>0</td><td>7.9</td><td>2.3</td><td>1.3</td><td>11.7</td><td>4646</td><td>1924862</td><td>16</td></tr>
+	<tr><td>33628</td><td>2013-12-01</td><td>Board Member    </td><td>LIBERTY MEDIA CORP</td><td>No</td><td>Greg Maffei</td><td>President/CEO</td><td>Greg Maffei joined this role on 14 Jan 2013</td><td>M</td><td>American</td><td>⋯</td><td>9</td><td>0</td><td>0</td><td>7.9</td><td>2.3</td><td>1.3</td><td>11.7</td><td>4646</td><td>1924862</td><td>16</td></tr>
+	<tr><td>33628</td><td>2013-12-01</td><td>Disclosed Earner</td><td>LIBERTY MEDIA CORP</td><td>No</td><td>Greg Maffei</td><td>President/CEO</td><td>Greg Maffei joined this role on 14 Jan 2013</td><td>M</td><td>American</td><td>⋯</td><td>9</td><td>0</td><td>0</td><td>7.9</td><td>2.3</td><td>1.3</td><td>11.7</td><td>4646</td><td>1924862</td><td>16</td></tr>
+	<tr><td>33628</td><td>2013-12-01</td><td>Board Member    </td><td>LIBERTY MEDIA CORP</td><td>No</td><td>Greg Maffei</td><td>President/CEO</td><td>Greg Maffei joined this role on 14 Jan 2013</td><td>M</td><td>American</td><td>⋯</td><td>9</td><td>0</td><td>0</td><td>7.9</td><td>2.3</td><td>1.3</td><td>11.7</td><td>4646</td><td>1924862</td><td>16</td></tr>
+	<tr><td>33628</td><td>2013-12-01</td><td>Disclosed Earner</td><td>LIBERTY MEDIA CORP</td><td>No</td><td>Greg Maffei</td><td>President/CEO</td><td>Greg Maffei joined this role on 14 Jan 2013</td><td>M</td><td>American</td><td>⋯</td><td>9</td><td>0</td><td>0</td><td>7.9</td><td>2.3</td><td>1.3</td><td>11.7</td><td>4646</td><td>1924862</td><td>16</td></tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>At least in this case, it seems that the entries are just duplicates. Some of the duplicates seem to be the same person taking different roles.</p>
+
+</div>
+</div>
+</div></section></section><section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h3 id="Validate-other-columns">Validate other columns<a class="anchor-link" href="#Validate-other-columns">&#182;</a></h3>
+</div>
+</div>
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Gender-variable">Gender variable<a class="anchor-link" href="#Gender-variable">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[18]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="nf">table</span><span class="p">(</span><span class="n">na_summary</span><span class="o">$</span><span class="n">gender</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+
+<div class="output_text output_subarea ">
+<pre>
+     F      M 
+ 98309 802889 </pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>The data does not contain any values other than F and M.</p>
+
+</div>
+</div>
+</div></section><section>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[19]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="n">na_summary</span> <span class="o">%&gt;%</span>
+    <span class="nf">group_by</span><span class="p">(</span><span class="n">directorid</span><span class="p">)</span> <span class="o">%&gt;%</span>
+    <span class="nf">summarize</span><span class="p">(</span><span class="n">n</span> <span class="o">=</span> <span class="nf">n_distinct</span><span class="p">(</span><span class="n">gender</span><span class="p">))</span> <span class="o">%&gt;%</span>
+    <span class="nf">arrange</span><span class="p">(</span><span class="nf">desc</span><span class="p">(</span><span class="n">n</span><span class="p">))</span> <span class="o">%&gt;%</span>
+    <span class="nf">head</span><span class="p">(</span><span class="m">3</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+<div class="output_subarea output_stream output_stderr output_text">
+<pre>`summarise()` ungrouping output (override with `.groups` argument)
+
+</pre>
+</div>
+</div>
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+<div class="output_html rendered_html output_subarea ">
+<table>
+<caption>A tibble: 3 × 2</caption>
+<thead>
+	<tr><th scope=col>directorid</th><th scope=col>n</th></tr>
+	<tr><th scope=col>&lt;dbl&gt;</th><th scope=col>&lt;int&gt;</th></tr>
+</thead>
+<tbody>
+	<tr><td> 1</td><td>1</td></tr>
+	<tr><td>16</td><td>1</td></tr>
+	<tr><td>27</td><td>1</td></tr>
+</tbody>
+</table>
+
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>All directors have the same gender across all reports, that's also good to know.</p>
+
+</div>
+</div>
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="boardid-vs-companyid">boardid vs companyid<a class="anchor-link" href="#boardid-vs-companyid">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[20]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="nf">table</span><span class="p">(</span><span class="n">na_summary_original</span><span class="o">$</span><span class="n">boardid</span> <span class="o">==</span> <span class="n">na_summary_original</span><span class="o">$</span><span class="n">companyid</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+
+<div class="output_text output_subarea ">
+<pre>
+   TRUE 
+1322206 </pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Interesting</p>
+
+</div>
+</div>
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<h4 id="Validate-cusip-and-ISIN">Validate cusip and ISIN<a class="anchor-link" href="#Validate-cusip-and-ISIN">&#182;</a></h4>
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Length for ISIN should always be 12: country code + cusip + check digit.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[21]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="nf">table</span><span class="p">(</span><span class="nf">nchar</span><span class="p">(</span><span class="n">na_summary</span><span class="o">$</span><span class="n">isin</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+
+<div class="output_text output_subarea ">
+<pre>
+    12 
+901198 </pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>That's good.</p>
+
+</div>
+</div>
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>Make sure that compa always provides 9 char cusip.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[22]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="n">compa_cusip</span> <span class="o">&lt;-</span> <span class="nf">read_feather</span><span class="p">(</span><span class="s">&quot;data/compa.feather&quot;</span><span class="p">)</span><span class="o">$</span><span class="n">cusip</span>
+<span class="nf">invisible</span><span class="p">(</span><span class="nf">gc</span><span class="p">())</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[23]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="nf">table</span><span class="p">(</span><span class="nf">nchar</span><span class="p">(</span><span class="n">compa_cusip</span><span class="p">))</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+
+<div class="output_text output_subarea ">
+<pre>
+     9 
+803402 </pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div></section><section>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>See how great the overlap is between the two.</p>
+
+</div>
+</div>
+</div>
+<div class="cell border-box-sizing code_cell rendered">
+<div class="input">
+<div class="prompt input_prompt">In&nbsp;[24]:</div>
+<div class="inner_cell">
+    <div class="input_area">
+<div class=" highlight hl-r"><pre><span></span><span class="nf">table</span><span class="p">(</span><span class="n">stringr</span><span class="o">::</span><span class="nf">str_sub</span><span class="p">(</span><span class="n">na_summary</span><span class="o">$</span><span class="n">isin</span><span class="p">,</span> <span class="m">3</span><span class="p">,</span> <span class="m">11</span><span class="p">)</span> <span class="o">%in%</span> <span class="n">compa_cusip</span><span class="p">)</span>
+</pre></div>
+
+    </div>
+</div>
+</div>
+
+<div class="output_wrapper">
+<div class="output">
+
+
+<div class="output_area">
+
+    <div class="prompt"></div>
+
+
+
+
+<div class="output_text output_subarea ">
+<pre>
+ FALSE   TRUE 
+137040 764158 </pre>
+</div>
+
+</div>
+
+</div>
+</div>
+
+</div>
+<div class="cell border-box-sizing text_cell rendered"><div class="prompt input_prompt">
+</div><div class="inner_cell">
+<div class="text_cell_render border-box-sizing rendered_html">
+<p>That's a pretty good coverage.</p>
 
 </div>
 </div>
