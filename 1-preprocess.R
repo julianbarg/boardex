@@ -34,6 +34,15 @@ write_feather(gender, "data/gender.feather")
 ## Extract relevant columns & companies from compa
 compa <- read_feather("data/compa.feather")
 compa <- select(compa, gvkey, fyear, cusip, apdedate, at, emp, dltt, ceq, act, lct, bkvlps, csho)
+compa <- compa %>%
+    group_by(gvkey, fyear) %>%
+    mutate(has_apdedate = as.logical(max(!is.na(apdedate))), 
+           n = n())  %>%
+    ungroup() %>%
+    filter(n == 1 | has_apdedate) %>%
+    select(-c(n, has_apdedate))
+compa$apdedate <- as_date(compa$apdedate)
+compa <- unique(compa)
 write_feather(compa, "data/compa_preprocessed.feather")
 
 
