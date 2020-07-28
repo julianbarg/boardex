@@ -37,4 +37,4 @@ orgs_compa <- subset(orgs_compa, year >= 2015 & year <= 2018)
 
 orgs_compa <- ungroup(orgs_compa)
 
-write_csv(orgs_compa, "data/output.csv")
+write_feather(orgs_compa, "data/preliminary.feather")
