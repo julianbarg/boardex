@@ -36,20 +36,26 @@ write_feather(df, "data/na_summary_cleaned.feather")
 
 
 
-# For compa, we also want to fill in data that might be available and then delete duplicates.
-# We keep the earliest observation (where there are two), to retain full years where fiscal year end was changed.
-# The largest number of duplicate observations is 4, so we repeat the step three times. To see, run:
-# df %>%
-#     group_by(gvkey, fyear) %>%
-#     summarize(n = n()) %>%
-#     arrange(desc(n)) %>%
-#     head(20)
+# Compa has a distinct pattern where there are some duplicate, very incomplete observations.
+# We retain more complete observations.
 df <- read_feather("data/compa_preprocessed.feather")
+df$nas <- rowSums(is.na(df))
 df <- df %>%
     group_by(gvkey, fyear) %>%
-    arrange(apdedate) %>%
-    fill(at, emp, dltt, ceq, act, lct, bkvlps, csho, .direction = "up") %>%
-    fill(at, emp, dltt, ceq, act, lct, bkvlps, csho, .direction = "up") %>%
-    fill(at, emp, dltt, ceq, act, lct, bkvlps, csho, .direction = "up") %>%
-    slice(1)
+    filter(nas == min(nas)) %>%
+    select(-nas)
+
+# The remaining conflicts we can resolve through the use of the fill function
+df <- df %>%
+    group_by(gvkey, fyear) %>%
+    fill(apdedate, at, emp, dltt, ceq, act, lct, bkvlps, csho, .direction = "downup") %>%
+    unique()
+
+# Now, this should generate an empty dataframe:
+# df %>%
+#     group_by(gvkey, fyear) %>%
+#     mutate(n = n()) %>%
+#     filter(n > 1) %>%
+#     arrange(desc(gvkey, fyear))
+
 write_feather(df, "data/compa_cleaned.feather")
