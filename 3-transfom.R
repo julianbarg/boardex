@@ -17,7 +17,7 @@ df$female_compensation <- df$totalcompensation * df$female
 df$equity_compensation <- df$totalcompensation * df$eqlinkremratio
 df$female_equity_compensation <- df$equity_compensation * df$female
 
-test <- df %>%
+df <- df %>%
     group_by(isin, annualreportdate) %>%
     summarize(name = first(boardname),
               ned = first(ned), 
