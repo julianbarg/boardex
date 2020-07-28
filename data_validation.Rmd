@@ -275,3 +275,57 @@ table(stringr::str_sub(na_summary$isin, 3, 11) %in% compa_cusip)
 ```
 
 That's a pretty good coverage.
+
+<!-- #region {"slideshow": {"slide_type": "slide"}} -->
+## Board characteristics dataset
+<!-- #endregion -->
+
+```{r slideshow={'slide_type': 'subslide'}}
+board <- read_feather("data/na_boards.feather")
+head(board)
+```
+
+```{r slideshow={'slide_type': 'subslide'}}
+nrow(board)
+
+nrow(unique(board))
+
+nrow(unique(select(board, -c(functionalexperience, ned, boardrole, brdposition))))
+
+board %>%
+    select(boardid, directorid, annualreportdate, committeename) %>%
+    unique() %>%
+    {nrow(.)}
+```
+
+There are some duplicates with diverging data, but only in variables that are not relevant.
+
+<!-- #region {"slideshow": {"slide_type": "slide"}} -->
+## Compa dataset
+<!-- #endregion -->
+
+```{r slideshow={'slide_type': 'subslide'}}
+compa <- read_feather("data/compa_preprocessed.feather")
+head(compa)
+```
+
+```{r slideshow={'slide_type': 'subslide'}}
+compa %>%
+    group_by(cusip, fyear) %>%
+    mutate(n = n()) %>%
+    filter(n > 1) %>%
+    head(10)
+```
+
+There is a weird thing going on here, where there are many almost empty observations that we can drop.
+
+```{r slideshow={'slide_type': 'subslide'}}
+compa_cleaned <- read_feather("data/compa_cleaned.feather")
+compa_cleaned %>%
+    group_by(gvkey, fyear) %>%
+    mutate(n = n()) %>%
+    filter(n > 1) %>%
+    arrange(desc(gvkey, fyear))
+```
+
+That method allowed us to clean up compa.
