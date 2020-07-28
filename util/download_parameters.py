@@ -12,6 +12,7 @@ datasets = [
      #             'gsubind', 'spcindcd', 'spcseccd', 'bkvlps', 'csho']}  # ,
      },
     {'name': 'names', 'library': 'compa', 'table': 'NAMES'},
+    {'name': 'age', 'library': 'boardex', 'table': 'NA_DIR_PROFILE_DETAILS'},
     # {'name': 'eur_summary', 'library': 'boardex', 'table': 'EUR_WRDS_ORG_SUMMARY'},
     # {'name': 'row_summary', 'library': 'boardex', 'table': 'ROW_WRDS_ORG_SUMMARY'},
     # {'name': 'uk_summary', 'library': 'boardex', 'table': 'UK_WRDS_ORG_SUMMARY'}
