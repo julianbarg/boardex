@@ -1,0 +1,72 @@
+---
+jupyter:
+  jupytext:
+    formats: ipynb,Rmd
+    text_representation:
+      extension: .Rmd
+      format_name: rmarkdown
+      format_version: '1.1'
+      jupytext_version: 1.2.1
+  kernelspec:
+    display_name: R 3.6.1
+    language: R
+    name: ir361
+---
+
+<!-- #region {"slideshow": {"slide_type": "slide"}} -->
+# Dataset Exploration
+<!-- #endregion -->
+
+<!-- #region {"slideshow": {"slide_type": "subslide"}} -->
+## Setup
+<!-- #endregion -->
+
+```{r}
+library(arrow)
+library(tidyverse)
+```
+
+```{r slideshow={'slide_type': 'subslide'}}
+df <- read_feather("data/output.feather")
+head(df)
+```
+
+<!-- #region {"slideshow": {"slide_type": "slide"}} -->
+## Duplicate observations
+<!-- #endregion -->
+
+```{r slideshow={'slide_type': 'subslide'}}
+nrow(df)
+```
+
+```{r}
+nrow(unique(select(df, year, boardid)))
+```
+
+Some organizations in the dataset have issued multiple securities, 1,876 duplicates with potentially diverging data should be removed.
+
+<!-- #region {"slideshow": {"slide_type": "slide"}} -->
+## BoardEx members present
+<!-- #endregion -->
+
+```{r slideshow={'slide_type': 'subslide'}}
+table(df$number_board_members - df$members_check)
+```
+
+Great, only in very few cases does the number of individual entries diverge from the number of board members as provided by BoardEx.
+
+<!-- #region {"slideshow": {"slide_type": "slide"}} -->
+## Number of observations
+<!-- #endregion -->
+
+```{r slideshow={'slide_type': 'subslide'}}
+nrow(subset(df, !is.na(avg_compensation_fm)))
+nrow(subset(df, !is.na(avg_compensation_fm_na_rm)))
+```
+
+```{r}
+nrow(subset(df, !is.na(gvkey)))
+nrow(subset(df, !is.na(gvkey) & !is.na(avg_compensation_fm)))
+```
+
+Only for 2,785 company-year observations is there data available on compensation of the female members of the board (and in all cases, data is available on all female members). For 3,784 observations, merging with Compustat failed. For 2,252 observations, data is available on both female compensation, and the variables extracted from Compustat.
