@@ -1,0 +1,49 @@
+Variables
+
+1. name                     - Name from BoardEx dataset.
+2. year                     - Year.
+3. boardid                  - Board ID/Company ID from the BoardEx dataset.
+4. ISIN                     - ISIN identifier from BoardEx dataset.
+5. cusip                    - cusip identifier, letters 3 though 11 of the ISIN identifier, and used for merging on Compustat.
+6. gvkey                    - gvkey identifier from Compustat.
+7. cik                      - cik identifier from Compustat (not used).
+8. number_board_members     - Number of board members provided by BoardEx.
+9. number_board_members_fm  - Number of female directors, calculated from BoardEx data.
+10. number_nominating       - Number of members on the nominating committee, calculated from BoardEx data.
+11. number_nominating_fm    - Number of female members on the nominating committee, calculated from BoardEx data.
+12. number_audit            - Number of members on the nominating committe, calculated from BoardEx data.
+13. number_audit_fm         - Number of female members on the nominating committee, calculated from BoardEx data.
+14. number_compensating     - Number of members on the compensation committee, calculated from BoardEx data.
+15. number_compensating_fm  - Numer of female members on the compensation committee, calculated from BoardEx data.
+16. gender_ratio            - Gender ratio as reported by BoardEx.
+17. avg_tenure              - Tenure (average), calculated from BoardEx data.
+18. avg_compensation        - Total compensation in 000s (average), calculated from BoardEx data.
+19. avg_compensation_fm     - Total compensation in 000s (average) of female members, calculated from BoardEx data.
+20. equity_compensation     - Value of Total Equity Held in 000s (average), calculated from BoardEx data.
+21. equity_compensation_fm  - Value of Total Equity Held in 000s (average) of female members, calculated from BoardEx data.
+22. avg_age                 - Average age of all members, calculated from BoardEx data.
+23. ethnic_diversity        - Nationality mix as reported by BoardEx.
+24. age_diversity           - Standard deviation of age as reported by BoardEx.
+25. ceo_chair               - Is the CEO also the chair?
+26. year_end_date           - Annual report date as reported by BoardEx.
+27. total_assets            - Total assets as reported by Compustat.
+28. employees               - Total number of employees as reported by Compustat.
+29. lt_debt                 - Long-term debt total as reported by Compustat.
+30. mv_common_equity        - Market value of common equity as reported by Compustat.
+31. current_assets          - Current assets (total) as reported by Compustat.
+32. current_liabilities     - Current liabilities (total) as reported by Compustat.
+33. book_value_share        - Book value per share as reported by Compustat.
+34. common_shares_outstanding   - Common shares outstanding as reported by Compustat.
+35. sic                     - Standard Industry Classification Code as reported by Compustat.
+36. naics                   - North American Industry Classification Code as reported by Compustat.
+37. gsubind                 - GIC sub-industry classification code as reported by Compustat. See also: https://en.wikipedia.org/wiki/Global_Industry_Classification_Standard
+38. gind                    - GIC industry classification code as reported by Compustat. Equal to the first six digits of gsubind. See also: https://en.wikipedia.org/wiki/Global_Industry_Classification_Standard
+39. gsector                 - GIC sector classification code as reported by Compustat. Equal to the first two digits of gsubind. See also: https://en.wikipedia.org/wiki/Global_Industry_Classification_Standard
+40. avg_compensation_na_rm  - Alternative variable to avg_compensation. Where data on some executives is missing, average is calculated for the remaining executives, rather than providing NA value.
+41. avg_compensation_fm_na_rm   - Alternative variable to avg_copensation_fm. Where data on some executives is missing, average is calculated for the remaining executives, rather than providing NA value.
+42. equity_compensation_na_rm   - Alternative variable to equity_compensation. Where data on some executives is missing, average is calculated for the remaining executives, rather than providing NA value.
+43. equity_compensation_fm_na_rm- Alternative variable to equity_compensation_fm. Where data on some executives is missing, average is calculated for the remaining executives, rather than providing NA value.
+44. avg_age_na_rm           - Alternative variable to avg_age. Where data on some executives is missing, average is calculated for the remaining executives, rather than providing NA value.
+45. members_check           - Calculated as the number of board members for a company-year observation in the BoardEx dataset. Allows for checking for discreptancies with number_board_members.
+46. age_diversity_check     - Calculated from the date of birth provided by BoardEx for board members. Allows for checking for discreptancies with age_diversity.
+47. compustat_date          - Actual Period End date from Compustat dataset.
