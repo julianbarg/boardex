@@ -14,8 +14,7 @@ df <- df %>%
     mutate(age = year(interval) + month(interval)/12 + day(interval)/365)
 df$female <- df$gender == "F"
 df$female_compensation <- df$totalcompensation * df$female
-df$equity_compensation <- df$totalcompensation * df$eqlinkremratio
-df$female_equity_compensation <- df$equity_compensation * df$female
+df$female_equity_compensation <- df$valtoteqheld * df$female
 
 df <- df %>%
     group_by(isin, annualreportdate) %>%
@@ -28,6 +27,8 @@ df <- df %>%
               avg_compensation_na_rm = mean(totalcompensation, na.rm = T),
               avg_compensation_fm = mean(female_compensation), 
               avg_compensation_fm_na_rm = mean(female_compensation, na.rm = T),
+              equity_compensation = mean(valtoteqheld), 
+              equity_compensation_na_rm = mean(valtoteqheld, na.rm = T),
               equity_compensation_fm = mean(female_equity_compensation), 
               equity_compensation_fm_na_rm = mean(female_equity_compensation, na.rm = T),
               nationalitymix = first(nationalitymix),

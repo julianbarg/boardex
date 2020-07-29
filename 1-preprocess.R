@@ -16,7 +16,7 @@ df$annualreportdate <- as_date(df$annualreportdate)
 df$ned <- df$ned == "Yes"
 df <- df %>%
     select(boardname, ned, gender, boardid, directorid, timebrd, annualreportdate, totalcompensation, 
-           eqlinkremratio, directorid, isin, genderratio, nationalitymix, numberdirectors, stdevage, cusip)
+           valtoteqheld, directorid, isin, genderratio, nationalitymix, numberdirectors, stdevage, cusip)
 df <- unique(df)
 write_feather(df, "data/na_summary_preprocessed.feather")
 

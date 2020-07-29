@@ -10,12 +10,12 @@ df <- read_feather("data/na_summary_preprocessed.feather")
 df <- filter(df,isin != "US30224P2002")
 
 # In some cases, there are multiple diverging observations for the same person.
-# We address that by first filling NAs and then removing remaining offending observations.
+# We address that by first filling NAs and then removing a low number of remaining offending observations.
 df$nas <- rowSums(is.na(df))
 df <- df %>%
     group_by(isin, annualreportdate, directorid) %>%
     arrange(nas) %>%
-    fill(totalcompensation, eqlinkremratio) %>%
+    fill(totalcompensation, valtoteqheld) %>%
     select(-nas) %>%
     unique()
 
