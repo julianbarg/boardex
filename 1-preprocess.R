@@ -15,7 +15,7 @@ df$cusip <- stringr::str_sub(df$isin, 3, 11)
 df$annualreportdate <- as_date(df$annualreportdate)
 df$ned <- df$ned == "Yes"
 df <- df %>%
-    select(boardname, ned, gender, boardid, directorid, timebrd, annualreportdate, totalcompensation, 
+    select(boardname, ned, gender, boardid, directorid, timebrd, annualreportdate, totalcompensation,
            valtoteqheld, directorid, isin, genderratio, nationalitymix, numberdirectors, stdevage, cusip)
 df <- unique(df)
 write_feather(df, "data/na_summary_preprocessed.feather")
@@ -36,7 +36,7 @@ compa <- read_feather("data/compa.feather")
 compa <- select(compa, gvkey, fyear, cusip, apdedate, at, emp, dltt, ceq, act, lct, bkvlps, csho)
 compa <- compa %>%
     group_by(gvkey, fyear) %>%
-    mutate(has_apdedate = as.logical(max(!is.na(apdedate))), 
+    mutate(has_apdedate = as.logical(max(!is.na(apdedate))),
            n = n())  %>%
     ungroup() %>%
     filter(n == 1 | has_apdedate) %>%

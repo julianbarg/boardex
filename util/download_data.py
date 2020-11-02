@@ -3,6 +3,7 @@
 import wrds
 import download_parameters as parameters
 import sys
+from pathlib import Path
 
 from os import listdir
 
@@ -19,6 +20,8 @@ redownload = "--redownload" in sys.argv
 
 db = wrds.Connection(wrds_username=parameters.username)
 
+
+Path('data').mkdir(exist_ok=True)
 
 for dataset in parameters.datasets:
     if not redownload and dataset['name'] + '.feather' in listdir('data'):

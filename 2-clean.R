@@ -30,7 +30,8 @@ inconsistencies$inconsistent <- TRUE
 df <- df %>%
     left_join(inconsistencies, by = c("isin", "annualreportdate")) %>%
     filter(!inconsistent %in% c(TRUE)) %>%
-    select(-inconsistent)
+    select(-inconsistent) %>%
+    ungroup()
 
 write_feather(df, "data/na_summary_cleaned.feather")
 
