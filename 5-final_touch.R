@@ -52,6 +52,6 @@ df <- select(# Identifiers
              members_check, age_diversity_check, compustat_date
              )
 
-write_feather(df, "data/output.feather")
-write_csv(df, "data/output.csv")
-openxlsx::write.xlsx(df, "data/output.xlsx")
+write_feather(df, "data/compustat.feather")
+write_csv(df, "data/compustat.csv")
+openxlsx::write.xlsx(df, "data/compustat.xlsx")
