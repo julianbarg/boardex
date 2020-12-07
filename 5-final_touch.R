@@ -18,6 +18,7 @@ naming <- c("number_board_members" = "numberdirectors",
             "current_assets" = "act",
             "current_liabilities" = "lct",
             "common_shares_outstanding" = "csho",
+            "net_income" = "ni",
             "gender_ratio" = "genderratio",
             "nationality_mix" = "nationalitymix",
             "avg_age" = "average_age",
@@ -39,16 +40,17 @@ df <- select(# Identifiers
              number_board_members, number_board_members_fm,
              number_nominating, number_audit, number_compensating, number_nominating_fm,
              number_audit_fm,  number_compensating_fm, gender_ratio, avg_tenure,
-             avg_compensation, avg_compensation_fm, equity_compensation,
-             equity_compensation_fm, avg_age, ethnic_diversity, age_diversity, ceo_chair,
+             avg_compensation, avg_compensation_fm, total_over_female,
+             total_over_male, equity_compensation, equity_compensation_fm,
+             avg_age, ethnic_diversity, age_diversity, ceo_chair,
              year_end_date,
              # Compustat
              total_assets, employees, lt_debt, mv_common_equity, current_assets,
              current_liabilities, book_value_share, common_shares_outstanding,
-             sic, naics, gsubind, gind, gsector,
+             net_income, cogs, ebitda, sic, naics, gsubind, gind, gsector,
              # Alternative ways to create variables & sources
-             avg_compensation_na_rm, avg_compensation_fm_na_rm,  equity_compensation_na_rm,
-             equity_compensation_fm_na_rm, avg_age_na_rm,
+             # avg_compensation_na_rm, avg_compensation_fm_na_rm,  equity_compensation_na_rm,
+             # equity_compensation_fm_na_rm, avg_age_na_rm,
              members_check, age_diversity_check, compustat_date
              )
 

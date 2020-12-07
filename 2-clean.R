@@ -15,7 +15,7 @@ df$nas <- rowSums(is.na(df))
 df <- df %>%
     group_by(isin, annualreportdate, directorid) %>%
     arrange(nas) %>%
-    fill(totalcompensation, valtoteqheld) %>%
+    fill(totalcompensation, valeqaward) %>%
     select(-nas) %>%
     unique()
 
@@ -49,7 +49,8 @@ df <- df %>%
 # The remaining conflicts we can resolve through the use of the fill function
 df <- df %>%
     group_by(gvkey, fyear) %>%
-    fill(apdedate, at, emp, dltt, ceq, act, lct, bkvlps, csho, .direction = "downup") %>%
+    fill(apdedate, at, emp, dltt, ceq, act, lct, bkvlps, csho, ni, cogs, ebitda,
+         .direction = "downup") %>%
     unique()
 
 # Now, this should generate an empty dataframe:

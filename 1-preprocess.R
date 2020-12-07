@@ -16,7 +16,7 @@ df$annualreportdate <- as_date(df$annualreportdate)
 df$ned <- df$ned == "Yes"
 df <- df %>%
     select(boardname, ned, gender, boardid, directorid, timebrd, annualreportdate, totalcompensation,
-           valtoteqheld, directorid, isin, genderratio, nationalitymix, numberdirectors, stdevage, cusip)
+           valeqaward, directorid, isin, genderratio, nationalitymix, numberdirectors, stdevage, cusip)
 df <- unique(df)
 write_feather(df, "data/na_summary_preprocessed.feather")
 
@@ -33,7 +33,8 @@ write_feather(gender, "data/gender.feather")
 
 ## Extract relevant columns & companies from compa
 compa <- read_feather("data/compa.feather")
-compa <- select(compa, gvkey, fyear, cusip, apdedate, at, emp, dltt, ceq, act, lct, bkvlps, csho)
+compa <- select(compa, gvkey, fyear, cusip, apdedate, at, emp, dltt, ceq, act,
+                lct, bkvlps, csho, ni, cogs, ebitda)
 compa <- compa %>%
     group_by(gvkey, fyear) %>%
     mutate(has_apdedate = as.logical(max(!is.na(apdedate))),
